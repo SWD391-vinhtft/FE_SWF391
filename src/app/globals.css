@@ -1,0 +1,209 @@
+@import "tailwindcss";
+
+:root {
+  /* Base colors */
+  --background: #ffffff;
+  --foreground: #171717;
+  
+  /* Green theme colors */
+  --primary: #10b981; /* emerald-500 */
+  --primary-foreground: #ffffff;
+  --primary-light: #34d399; /* emerald-400 */
+  --primary-dark: #059669; /* emerald-600 */
+  
+  /* Secondary colors */
+  --secondary: #f3f4f6; /* gray-100 */
+  --secondary-foreground: #374151; /* gray-700 */
+  
+  /* Accent colors */
+  --accent: #d1fae5; /* emerald-100 */
+  --accent-foreground: #065f46; /* emerald-800 */
+  
+  /* Muted colors */
+  --muted: #f9fafb; /* gray-50 */
+  --muted-foreground: #6b7280; /* gray-500 */
+  
+  /* Border and input */
+  --border: #e5e7eb; /* gray-200 */
+  --input: #f9fafb; /* gray-50 */
+  --ring: #10b981; /* emerald-500 */
+  
+  /* Destructive */
+  --destructive: #ef4444; /* red-500 */
+  --destructive-foreground: #ffffff;
+  
+  /* Card */
+  --card: #ffffff;
+  --card-foreground: #171717;
+  
+  /* Popover */
+  --popover: #ffffff;
+  --popover-foreground: #171717;
+  
+  /* Radius */
+  --radius: 0.5rem;
+}
+
+.dark {
+  /* Dark mode colors */
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  
+  /* Green theme colors for dark mode */
+  --primary: #10b981; /* emerald-500 */
+  --primary-foreground: #ffffff;
+  --primary-light: #34d399; /* emerald-400 */
+  --primary-dark: #065f46; /* emerald-800 */
+  
+  /* Secondary colors for dark mode */
+  --secondary: #1f2937; /* gray-800 */
+  --secondary-foreground: #d1d5db; /* gray-300 */
+  
+  /* Accent colors for dark mode */
+  --accent: #064e3b; /* emerald-900 */
+  --accent-foreground: #d1fae5; /* emerald-100 */
+  
+  /* Muted colors for dark mode */
+  --muted: #111827; /* gray-900 */
+  --muted-foreground: #9ca3af; /* gray-400 */
+  
+  /* Border and input for dark mode */
+  --border: #374151; /* gray-700 */
+  --input: #1f2937; /* gray-800 */
+  --ring: #10b981; /* emerald-500 */
+  
+  /* Destructive for dark mode */
+  --destructive: #ef4444; /* red-500 */
+  --destructive-foreground: #ffffff;
+  
+  /* Card for dark mode */
+  --card: #111827; /* gray-900 */
+  --card-foreground: #ededed;
+  
+  /* Popover for dark mode */
+  --popover: #111827; /* gray-900 */
+  --popover-foreground: #ededed;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-light: var(--primary-light);
+  --color-primary-dark: var(--primary-dark);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* Selection colors */
+::selection {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Focus outline */
+.focus-ring {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Animation classes */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.3s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
