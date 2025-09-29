@@ -58,7 +58,7 @@ const createItemSchema = z.object({
 type CreateItemFormData = z.infer<typeof createItemSchema>;
 
 export default function CreateItemPage() {
-  const [images, setImages] = useState<File[]>([]);
+  const [images, setImages] = useState<string[]>([]); // Changed from File[] to string[]
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const { user } = useAuth();
@@ -97,8 +97,8 @@ export default function CreateItemPage() {
     }
   };
 
-  const handleImageUpload = (newImages: File[]) => {
-    setImages(prev => [...prev, ...newImages].slice(0, 10)); // Max 10 images
+  const handleImageUpload = (urls: string[]) => { // Changed from File[] to string[]
+    setImages(prev => [...prev, ...urls].slice(0, 10)); // Max 10 images
   };
 
   const removeImage = (index: number) => {
@@ -216,11 +216,11 @@ export default function CreateItemPage() {
                   
                   {images.length > 0 && (
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                      {images.map((image, index) => (
+                      {images.map((imageUrl, index) => (
                         <div key={index} className="relative group">
                           <div className="aspect-square bg-muted rounded-lg overflow-hidden">
                             <img
-                              src={URL.createObjectURL(image)}
+                              src={imageUrl} // Changed from URL.createObjectURL(image) to imageUrl
                               alt={`Upload ${index + 1}`}
                               className="w-full h-full object-cover"
                             />
