@@ -147,7 +147,7 @@ export default function HomePage() {
               className="relative"
             >
               <div className="relative z-10 grid grid-cols-2 gap-4">
-                <Card hover className="col-span-2">
+                <Card className="col-span-2">
                   <CardContent className="p-6">
                     <div className="flex items-center space-x-4">
                       <div className="p-3 bg-primary/10 rounded-lg">
@@ -161,7 +161,7 @@ export default function HomePage() {
                   </CardContent>
                 </Card>
                 
-                <Card hover>
+                <Card>
                   <CardContent className="p-4">
                     <div className="text-center">
                       <Heart className="h-8 w-8 text-primary mx-auto mb-2" />
@@ -170,7 +170,7 @@ export default function HomePage() {
                   </CardContent>
                 </Card>
                 
-                <Card hover>
+                <Card>
                   <CardContent className="p-4">
                     <div className="text-center">
                       <TrendingUp className="h-8 w-8 text-primary mx-auto mb-2" />
@@ -262,7 +262,7 @@ export default function HomePage() {
               }
             ].map((feature, index) => (
               <motion.div key={index} variants={itemVariants}>
-                <Card hover className="h-full">
+                <Card className="h-full">
                   <CardHeader>
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                       <feature.icon className="h-6 w-6 text-primary" />
