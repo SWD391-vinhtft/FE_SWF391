@@ -39,7 +39,7 @@ const stats = [
   },
   {
     name: 'Revenue',
-    value: ',231',
+    value: '1,231',
     change: '+15%',
     changeType: 'positive',
     icon: DollarSign,
