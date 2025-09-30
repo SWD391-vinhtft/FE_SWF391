@@ -4,9 +4,9 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata: Metadata = {
-  title: "Green Loop - Circular Fashion Platform",
-  description: "Sustainable fashion marketplace for buying, selling, and renting pre-loved clothing",
-  keywords: ["fashion", "sustainability", "circular economy", "marketplace", "green"],
+  title: "Green Loop - Recycled Products Marketplace",
+  description: "Premium recycled products marketplace for eco-friendly home goods and sustainable fashion",
+  keywords: ["recycled products", "sustainability", "eco-friendly", "marketplace", "green", "environment"],
 };
 
 export default function RootLayout({

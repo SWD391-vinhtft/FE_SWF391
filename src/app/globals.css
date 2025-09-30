@@ -3,7 +3,7 @@
 :root {
   /* Base colors */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #000000;
   
   /* Green theme colors */
   --primary: #10b981; /* emerald-500 */
@@ -20,12 +20,12 @@
   --accent-foreground: #065f46; /* emerald-800 */
   
   /* Muted colors */
-  --muted: #f9fafb; /* gray-50 */
-  --muted-foreground: #6b7280; /* gray-500 */
+  --muted: #f5f5f5; /* light gray */
+  --muted-foreground: #666666; /* dark gray */
   
   /* Border and input */
-  --border: #e5e7eb; /* gray-200 */
-  --input: #f9fafb; /* gray-50 */
+  --border: #e5e5e5; /* light gray */
+  --input: #f5f5f5; /* light gray */
   --ring: #10b981; /* emerald-500 */
   
   /* Destructive */
@@ -34,11 +34,11 @@
   
   /* Card */
   --card: #ffffff;
-  --card-foreground: #171717;
+  --card-foreground: #000000;
   
   /* Popover */
   --popover: #ffffff;
-  --popover-foreground: #171717;
+  --popover-foreground: #000000;
   
   /* Radius */
   --radius: 0.5rem;
@@ -46,8 +46,8 @@
 
 .dark {
   /* Dark mode colors */
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: #000000;
+  --foreground: #ffffff;
   
   /* Green theme colors for dark mode */
   --primary: #10b981; /* emerald-500 */
@@ -64,12 +64,12 @@
   --accent-foreground: #d1fae5; /* emerald-100 */
   
   /* Muted colors for dark mode */
-  --muted: #111827; /* gray-900 */
-  --muted-foreground: #9ca3af; /* gray-400 */
+  --muted: #1a1a1a; /* dark gray */
+  --muted-foreground: #cccccc; /* light gray */
   
   /* Border and input for dark mode */
-  --border: #374151; /* gray-700 */
-  --input: #1f2937; /* gray-800 */
+  --border: #333333; /* dark gray */
+  --input: #1a1a1a; /* dark gray */
   --ring: #10b981; /* emerald-500 */
   
   /* Destructive for dark mode */
@@ -77,12 +77,12 @@
   --destructive-foreground: #ffffff;
   
   /* Card for dark mode */
-  --card: #111827; /* gray-900 */
-  --card-foreground: #ededed;
+  --card: #1a1a1a; /* dark gray */
+  --card-foreground: #ffffff;
   
   /* Popover for dark mode */
-  --popover: #111827; /* gray-900 */
-  --popover-foreground: #ededed;
+  --popover: #1a1a1a; /* dark gray */
+  --popover-foreground: #ffffff;
 }
 
 @theme inline {
