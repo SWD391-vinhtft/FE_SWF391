@@ -21,6 +21,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useAuth } from '@/contexts/AuthContext';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
 const tabs = [
   { id: 'overview', name: 'Overview', icon: User },
@@ -92,7 +94,9 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
+      <Header />
+      
+      {/* Profile Header */}
       <div className="bg-gradient-to-r from-primary to-primary-light">
         <div className="container mx-auto px-4 py-16">
           <motion.div 
@@ -157,7 +161,7 @@ export default function ProfilePage() {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-10">
+      <div className="border-b bg-background/80 backdrop-blur-sm sticky top-16 z-10">
         <div className="container mx-auto px-4">
           <nav className="flex space-x-8">
             {tabs.map((tab) => (
@@ -403,6 +407,8 @@ export default function ProfilePage() {
           )}
         </motion.div>
       </div>
+
+      <Footer />
     </div>
   );
 } 

@@ -12,9 +12,6 @@ import {
   Upload, 
   X, 
   Plus,
-  Recycle,
-  User,
-  Bell,
   Camera,
   DollarSign,
   Package,
@@ -24,9 +21,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import ImageUpload from '@/components/ui/ImageUpload';
 import { useAuth } from '@/contexts/AuthContext';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
 const categories = [
   'Clothing', 'Shoes', 'Accessories', 'Bags', 'Jewelry', 'Outerwear'
@@ -133,70 +131,30 @@ export default function CreateItemPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="flex items-center space-x-2"
-            >
-              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
-                <Recycle className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold">Green Loop</span>
-            </motion.div>
-
-            <div className="hidden md:flex items-center space-x-8">
-              <Link href="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
-                Dashboard
-              </Link>
-              <Link href="/marketplace" className="text-sm font-medium hover:text-primary transition-colors">
-                Marketplace
-              </Link>
-              <Link href="/profile" className="text-sm font-medium hover:text-primary transition-colors">
-                Profile
-              </Link>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm">
-                <Bell className="h-4 w-4" />
-              </Button>
-              <ThemeToggle />
-              <Button asChild variant="outline" size="sm">
-                <Link href="/profile">
-                  <User className="h-4 w-4 mr-2" />
-                  {user?.firstName || 'User'}
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="max-w-4xl mx-auto space-y-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-4xl mx-auto"
         >
-          {/* Header */}
-          <motion.div variants={itemVariants} className="flex items-center space-x-4">
-            <Button asChild variant="ghost" size="sm">
-              <Link href="/dashboard">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Dashboard
-              </Link>
-            </Button>
-            <div>
-              <h1 className="text-3xl font-bold">List New Item</h1>
-              <p className="text-muted-foreground">Share your preloved items with the community</p>
-            </div>
-          </motion.div>
+          {/* Back Button */}
+          <Button variant="ghost" className="mb-6" asChild>
+            <Link href="/profile">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Profile
+            </Link>
+          </Button>
+
+          {/* Page Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold mb-2">List a New Item</h1>
+            <p className="text-muted-foreground">
+              Share your pre-loved fashion items with our sustainable community
+            </p>
+          </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             {/* Images Section */}
@@ -454,6 +412,8 @@ export default function CreateItemPage() {
           </form>
         </motion.div>
       </main>
+
+      <Footer />
     </div>
   );
 }

@@ -25,6 +25,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import Link from 'next/link';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
 // Mock data - in real app, this would come from API
 const itemData = {
@@ -111,6 +113,8 @@ export default function ItemDetailPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Header />
+      
       {/* Breadcrumb */}
       <div className="border-b">
         <div className="container mx-auto px-4 py-4">
@@ -424,6 +428,8 @@ export default function ItemDetailPage() {
           </motion.div>
         </motion.div>
       </div>
+
+      <Footer />
     </div>
   );
 } 

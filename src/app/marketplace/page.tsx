@@ -9,20 +9,16 @@ import {
   Grid, 
   List, 
   Heart, 
-  Star,
   MapPin,
-  Recycle,
   SlidersHorizontal,
-  ChevronDown,
-  User,
-  Bell
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { useAuth } from '@/contexts/AuthContext';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
 const categories = [
   'All Categories', 'Clothing', 'Shoes', 'Accessories', 'Bags', 'Jewelry'
@@ -165,48 +161,7 @@ export default function MarketplacePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="flex items-center space-x-2"
-            >
-              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
-                <Recycle className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold">Green Loop</span>
-            </motion.div>
-
-            <div className="hidden md:flex items-center space-x-8">
-              <Link href="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
-                Dashboard
-              </Link>
-              <Link href="/marketplace" className="text-sm font-medium text-primary">
-                Marketplace
-              </Link>
-              <Link href="/profile" className="text-sm font-medium hover:text-primary transition-colors">
-                Profile
-              </Link>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm">
-                <Bell className="h-4 w-4" />
-              </Button>
-              <ThemeToggle />
-              <Button asChild variant="outline" size="sm">
-                <Link href="/profile">
-                  <User className="h-4 w-4 mr-2" />
-                  {user?.firstName || 'User'}
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -440,6 +395,10 @@ export default function MarketplacePage() {
           </motion.div>
         </motion.div>
       </main>
+
+      <Footer />
     </div>
   );
 }
+
+
