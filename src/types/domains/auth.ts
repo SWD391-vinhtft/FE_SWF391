@@ -58,7 +58,7 @@ export interface RegisterRequest {
 
 // Authentication Response Types
 export interface LoginResponse {
-  token: string;
+  accessToken: string; // Changed from 'token' to match backend
   tokenType: string;
   userId: string; // Changed from number to string (UUID)
   firstName: string;

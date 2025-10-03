@@ -13,6 +13,8 @@ import { Input } from '@/components/ui/Input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { useAuth } from '@/contexts/AuthContext';
 import { handleApiError } from '@/api';
+import { UnverifiedEmailModal } from '@/components/auth/UnverifiedEmailModal';
+import { AuthLayout } from '@/components/auth/AuthLayout';
 
 const loginSchema = z.object({
   emailOrUsername: z.string().min(1, 'Email or username is required'), // Changed field name
@@ -25,6 +27,8 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showUnverifiedModal, setShowUnverifiedModal] = useState(false);
+  const [unverifiedEmail, setUnverifiedEmail] = useState('');
   const { login } = useAuth();
   const router = useRouter();
 
@@ -42,31 +46,25 @@ export default function LoginPage() {
       setError('');
       await login(data);
       router.push('/dashboard');
-    } catch (err) {
-      setError(handleApiError(err));
+    } catch (err: any) {
+      const errorMessage = handleApiError(err);
+      
+      // Check if error is about unverified email
+      if (errorMessage.toLowerCase().includes('email not verified') || 
+          errorMessage.toLowerCase().includes('verify your email')) {
+        setUnverifiedEmail(data.emailOrUsername);
+        setShowUnverifiedModal(true);
+      } else {
+        setError(errorMessage);
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <AuthLayout showBackButton={true} backHref="/">
       <div className="w-full max-w-md">
-        {/* Back to home link */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <Link
-            href="/"
-            className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to home
-          </Link>
-        </motion.div>
-
         {/* Login Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -217,25 +215,13 @@ export default function LoginPage() {
           </Card>
         </motion.div>
 
-        {/* Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mt-8 text-center text-sm text-muted-foreground"
-        >
-          <p>
-            By signing in, you agree to our{' '}
-            <Link href="/terms" className="text-primary hover:underline">
-              Terms of Service
-            </Link>{' '}
-            and{' '}
-            <Link href="/privacy" className="text-primary hover:underline">
-              Privacy Policy
-            </Link>
-          </p>
-        </motion.div>
+        {/* Unverified Email Modal */}
+        <UnverifiedEmailModal
+          isOpen={showUnverifiedModal}
+          onClose={() => setShowUnverifiedModal(false)}
+          email={unverifiedEmail}
+        />
       </div>
-    </div>
+    </AuthLayout>
   );
 }

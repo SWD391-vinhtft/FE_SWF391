@@ -10,14 +10,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useAuth } from '@/contexts/AuthContext';
 
 function VerifyContent() {
-  const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'idle'>('idle');
+  const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'idle' | 'resent'>('idle');
   const [message, setMessage] = useState('');
   const [isResending, setIsResending] = useState(false);
+  const [countdown, setCountdown] = useState(0);
   const { verifyEmail } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
   const email = searchParams.get('email');
+
+  // Countdown timer for resend button
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [countdown]);
 
   useEffect(() => {
     if (token) {
@@ -43,15 +52,23 @@ function VerifyContent() {
   };
 
   const handleResendEmail = async () => {
-    if (!email) return;
+    if (!email) {
+      setMessage('Email address is required to resend verification.');
+      setStatus('error');
+      return;
+    }
     
     try {
       setIsResending(true);
-      // Here you would call an API to resend verification email
-      // For now, we'll just show a success message
-      setMessage('Verification email sent! Please check your inbox.');
+      setMessage('');
+      const { AuthAPI } = await import('@/api');
+      const result = await AuthAPI.resendVerificationEmail(email);
+      setMessage(result || 'Verification email sent successfully! Please check your inbox.');
+      setStatus('resent');
+      setCountdown(60); // 60 second countdown
     } catch (error) {
-      setMessage('Failed to resend email. Please try again.');
+      setStatus('error');
+      setMessage(error instanceof Error ? error.message : 'Failed to resend email. Please try again.');
     } finally {
       setIsResending(false);
     }
@@ -63,6 +80,8 @@ function VerifyContent() {
         return <RefreshCw className="h-16 w-16 text-primary animate-spin" />;
       case 'success':
         return <CheckCircle className="h-16 w-16 text-primary" />;
+      case 'resent':
+        return <CheckCircle className="h-16 w-16 text-green-500" />;
       case 'error':
         return <XCircle className="h-16 w-16 text-destructive" />;
       default:
@@ -76,6 +95,8 @@ function VerifyContent() {
         return 'Verifying your email...';
       case 'success':
         return 'Email verified successfully!';
+      case 'resent':
+        return 'Verification email sent!';
       case 'error':
         return 'Verification failed';
       default:
@@ -89,6 +110,8 @@ function VerifyContent() {
         return 'Please wait while we verify your email address.';
       case 'success':
         return 'Your account has been successfully verified. You can now sign in to your account.';
+      case 'resent':
+        return message || 'A new verification email has been sent to your inbox. Please check your email (and spam folder) and click the verification link.';
       case 'error':
         return message || 'There was an error verifying your email. Please try again or contact support.';
       default:
@@ -194,22 +217,42 @@ function VerifyContent() {
                 </motion.div>
               )}
 
-              {status === 'idle' && email && (
+              {(status === 'idle' || status === 'resent') && email && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
                   className="space-y-4"
                 >
+                  {status === 'resent' && (
+                    <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                      <div className="flex items-center justify-center gap-2 mb-2">
+                        <CheckCircle className="h-5 w-5 text-green-500" />
+                        <p className="text-green-800 dark:text-green-400 font-medium">Email Sent Successfully!</p>
+                      </div>
+                      <p className="text-sm text-green-700 dark:text-green-500 text-center">
+                        {message || 'Please check your inbox and spam folder for the verification email.'}
+                      </p>
+                    </div>
+                  )}
+                  
                   <div className="text-center">
                     <Button
                       onClick={handleResendEmail}
                       variant="gradient"
                       className="w-full"
+                      disabled={countdown > 0 || isResending}
                       loading={isResending}
                     >
-                      Resend verification email
+                      {countdown > 0 
+                        ? `Resend in ${countdown}s` 
+                        : 'Resend verification email'}
                     </Button>
+                    {countdown > 0 && (
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Please wait before requesting another email
+                      </p>
+                    )}
                   </div>
                   
                   <div className="text-center">

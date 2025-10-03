@@ -207,4 +207,27 @@ export class AuthAPI {
       throw new Error(handleApiError(error));
     }
   }
+
+  /**
+   * Resend verification email with structured response handling
+   */
+  static async resendVerificationEmail(email: string): Promise<string> {
+    try {
+      const response = await apiClient.post<ApiResponse<string>>('/api/auth/resend-verification', null, {
+        params: { email }
+      });
+      
+      if (response.data.success) {
+        return response.data.message || 'Verification email sent successfully';
+      } else {
+        throw new Error(response.data.message || 'Failed to resend verification email');
+      }
+    } catch (error: any) {
+      if (error.response?.data) {
+        const errorData = error.response.data as ApiError;
+        throw new Error(errorData.message || 'Failed to resend verification email');
+      }
+      throw new Error(handleApiError(error));
+    }
+  }
 }

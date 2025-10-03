@@ -18,10 +18,23 @@ const registerSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
   email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  confirmPassword: z.string().min(6, 'Please confirm your password'),
-  phone: z.string().optional(),
-  username: z.string().optional(),
+  password: z.string()
+    .min(8, 'Password must be at least 8 characters')
+    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[0-9]/, 'Password must contain at least one number'),
+  confirmPassword: z.string().min(8, 'Please confirm your password'),
+  phone: z.string()
+    .min(1, 'Phone number is required')
+    .regex(/^0\d{9}$/, 'Phone number must be 10 digits and start with 0'),
+  username: z.string().min(3, 'Username must be at least 3 characters'),
+  userType: z.enum(['CONSUMER', 'COLLECTOR', 'BRAND'] as const),
+  acceptTerms: z.boolean().refine(val => val === true, {
+    message: 'You must accept the terms and conditions',
+  }),
+  acceptPrivacy: z.boolean().refine(val => val === true, {
+    message: 'You must accept the privacy policy',
+  }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -41,23 +54,60 @@ export default function RegisterPage() {
   const {
     register,
     handleSubmit,
+    setError: setFieldError,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    mode: 'onBlur', // Validate on blur to show all errors at once
+    defaultValues: {
+      userType: 'CONSUMER',
+      acceptTerms: false,
+      acceptPrivacy: false,
+    },
   });
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
       setIsLoading(true);
       setError('');
-      await registerUser(data);
+      
+      // Remove confirmPassword before sending to API and ensure userType is set
+      const { confirmPassword, ...registerData } = data;
+      const finalData = {
+        ...registerData,
+        userType: registerData.userType || 'CONSUMER',
+      };
+      await registerUser(finalData as any);
+      
       setSuccess(true);
       // Redirect to verification page after 2 seconds
       setTimeout(() => {
         router.push('/auth/verify?email=' + encodeURIComponent(data.email));
       }, 2000);
-    } catch (err) {
-      setError(handleApiError(err));
+    } catch (err: any) {
+      console.error('Registration error:', err);
+      
+      // Check if error response contains field-specific validation errors
+      if (err.response?.data?.errors) {
+        const backendErrors = err.response.data.errors;
+        
+        // Set field-level errors from backend
+        Object.keys(backendErrors).forEach((field) => {
+          const errorMessages = backendErrors[field];
+          if (errorMessages && errorMessages.length > 0) {
+            setFieldError(field as any, {
+              type: 'server',
+              message: errorMessages[0], // Show first error message
+            });
+          }
+        });
+        
+        // Set general error message
+        setError(err.response.data.message || 'Validation failed. Please check the fields above.');
+      } else {
+        // Generic error handling
+        setError(handleApiError(err));
+      }
     } finally {
       setIsLoading(false);
     }
@@ -247,34 +297,44 @@ export default function RegisterPage() {
                 />
 
                 <div className="space-y-4">
-                  <div className="flex items-start space-x-2">
-                    <input
-                      type="checkbox"
-                      id="terms"
-                      className="mt-1 rounded border-border text-primary focus:ring-primary"
-                      required
-                    />
-                    <label htmlFor="terms" className="text-sm text-muted-foreground">
-                      I agree to the{' '}
-                      <Link href="/terms" className="text-primary hover:underline">
-                        Terms of Service
-                      </Link>{' '}
-                      and{' '}
-                      <Link href="/privacy" className="text-primary hover:underline">
-                        Privacy Policy
-                      </Link>
-                    </label>
+                  <div>
+                    <div className="flex items-start space-x-2">
+                      <input
+                        {...register('acceptTerms')}
+                        type="checkbox"
+                        id="terms"
+                        className="mt-1 rounded border-border text-primary focus:ring-primary"
+                      />
+                      <label htmlFor="terms" className="text-sm text-muted-foreground">
+                        I agree to the{' '}
+                        <Link href="/terms" className="text-primary hover:underline">
+                          Terms of Service
+                        </Link>
+                      </label>
+                    </div>
+                    {errors.acceptTerms && (
+                      <p className="mt-1 text-sm text-destructive">{errors.acceptTerms.message}</p>
+                    )}
                   </div>
 
-                  <div className="flex items-start space-x-2">
-                    <input
-                      type="checkbox"
-                      id="newsletter"
-                      className="mt-1 rounded border-border text-primary focus:ring-primary"
-                    />
-                    <label htmlFor="newsletter" className="text-sm text-muted-foreground">
-                      Subscribe to our newsletter for sustainable fashion tips and updates
-                    </label>
+                  <div>
+                    <div className="flex items-start space-x-2">
+                      <input
+                        {...register('acceptPrivacy')}
+                        type="checkbox"
+                        id="privacy"
+                        className="mt-1 rounded border-border text-primary focus:ring-primary"
+                      />
+                      <label htmlFor="privacy" className="text-sm text-muted-foreground">
+                        I agree to the{' '}
+                        <Link href="/privacy" className="text-primary hover:underline">
+                          Privacy Policy
+                        </Link>
+                      </label>
+                    </div>
+                    {errors.acceptPrivacy && (
+                      <p className="mt-1 text-sm text-destructive">{errors.acceptPrivacy.message}</p>
+                    )}
                   </div>
                 </div>
 

@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response: LoginResponse = await AuthAPI.login(credentials);
       
       // Store token and user data
-      const { token: authToken, tokenType, ...userData } = response;
+      const { accessToken: authToken, tokenType, ...userData } = response;
       const fullToken = `${tokenType} ${authToken}`.trim();
       
       setToken(fullToken);
